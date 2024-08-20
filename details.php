@@ -16,33 +16,27 @@ if (isset($_GET['rec_id'])) {
     
     // Prepare the SQL query
     $sql = "
-        SELECT 
-            tb_record.rec_operation_date AS 'Operation Date',
-            tb_record.rec_surgeon AS 'Surgeon',
-            tb_record.rec_operation AS 'Operation',
-            tb_record.rec_room AS 'Room',
-            tb_record.rec_created_date AS 'Created Date',
-            tb_record.rec_created_by AS 'Created By',
-            tb_record.rec_edited_date AS 'Edited Date',
-            tb_record.rec_pt_hn AS 'Patient HN',
-            tb_patients.pt_name AS 'Patient Name',
-            tb_patients.pt_address AS 'Patient Address',
-            tb_implant_used.imu_id AS 'Implant ID',
-            tb_implant_used.imu_name AS 'Implant Name',
-            tb_implant_used.imu_company_id AS 'Company ID',
-            tb_implant_used.imu_number AS 'Implant Number',
-            tb_plate.plate_name AS 'Plate Name',
-            tb_plate.plate_size AS 'Plate Size'
-        FROM 
-            tb_record
-        INNER JOIN 
-            tb_patients ON tb_record.rec_pt_hn = tb_patients.pt_hn
-        INNER JOIN 
-            tb_implant_used ON tb_record.rec_id = tb_implant_used.rec_id
-        INNER JOIN 
-            tb_plate ON tb_implant_used.imu_company_id = tb_plate.companyId
-        WHERE 
-            tb_record.rec_id = ?"; // Use a prepared statement to avoid SQL injection
+    SELECT 
+        tb_record.rec_operation_date AS 'Operation Date',
+        tb_record.rec_surgeon AS 'Surgeon',
+        tb_record.rec_operation AS 'Operation',
+        tb_record.rec_room AS 'Room',
+        tb_record.rec_created_date AS 'Created Date',
+        tb_record.rec_created_by AS 'Created By',
+        tb_record.rec_pt_hn AS 'Patient HN',
+        tb_patients.pt_name AS 'Patient Name',
+        tb_plate.plate_name AS 'Plate Name',
+        tb_plate.plate_size AS 'Plate Size'
+    FROM 
+        tb_record
+    INNER JOIN 
+        tb_patients ON tb_record.rec_pt_hn = tb_patients.pt_hn
+    INNER JOIN 
+        tb_implant_used ON tb_record.rec_id = tb_implant_used.rec_id
+    INNER JOIN 
+        tb_plate ON tb_implant_used.imu_company_id = tb_plate.companyId
+    WHERE 
+        tb_record.rec_id = ?";
 
     if ($stmt = $mysqli->prepare($sql)) {
         $stmt->bind_param("i", $rec_id); // Bind the rec_id to the query
@@ -105,36 +99,12 @@ $mysqli->close();
                 <td><?php echo htmlspecialchars($row['Created By']); ?></td>
             </tr>
             <tr>
-                <th>Edited Date</th>
-                <td><?php echo htmlspecialchars($row['Edited Date']); ?></td>
-            </tr>
-            <tr>
                 <th>Patient HN</th>
                 <td><?php echo htmlspecialchars($row['Patient HN']); ?></td>
             </tr>
             <tr>
                 <th>Patient Name</th>
                 <td><?php echo htmlspecialchars($row['Patient Name']); ?></td>
-            </tr>
-            <tr>
-                <th>Patient Address</th>
-                <td><?php echo htmlspecialchars($row['Patient Address']); ?></td>
-            </tr>
-            <tr>
-                <th>Implant ID</th>
-                <td><?php echo htmlspecialchars($row['Implant ID']); ?></td>
-            </tr>
-            <tr>
-                <th>Implant Name</th>
-                <td><?php echo htmlspecialchars($row['Implant Name']); ?></td>
-            </tr>
-            <tr>
-                <th>Company ID</th>
-                <td><?php echo htmlspecialchars($row['Company ID']); ?></td>
-            </tr>
-            <tr>
-                <th>Implant Number</th>
-                <td><?php echo htmlspecialchars($row['Implant Number']); ?></td>
             </tr>
             <tr>
                 <th>Plate Name</th>
